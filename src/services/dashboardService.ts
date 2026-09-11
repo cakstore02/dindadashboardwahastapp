@@ -1,4 +1,4 @@
-import { supabaseAnon as supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { TransactionRow, DashboardMetrics as BaseDashboardMetrics } from "@/types";
 
 export type PeriodFilter =
@@ -67,24 +67,13 @@ export const dashboardService = {
     customRange: DateRange = {}
   ): Promise<ReportingData> {
     try {
-      let transactions: TransactionRow[] = [];
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      try {
-        const { data, error } = await supabase
-          .from("transactions")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        if (data && data.length > 0) {
-          transactions = data;
-        }
-      } catch (err) {
-        console.error("Supabase fetch failed in dashboardService:", err);
-      }
+      if (error) throw new Error(error.message);
+      const transactions: TransactionRow[] = data ?? [];
 
       const now = new Date();
       let start = new Date();

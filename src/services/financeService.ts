@@ -1,4 +1,4 @@
-import { supabaseAnon as supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { TransactionRow } from "@/types";
 
 export type PeriodFilter = "today" | "7days" | "month" | "custom";
@@ -58,7 +58,7 @@ export const financeService = {
     try {
       let transactions: TransactionRow[] = [];
 
-      // Fetch all transactions using supabaseAnon
+      // Fetch all transactions with the authenticated dashboard session.
       const { data, error } = await supabase
         .from("transactions")
         .select("*")

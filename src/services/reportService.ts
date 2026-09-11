@@ -1,4 +1,4 @@
-import { supabaseAnon as supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { TransactionRow } from "@/types";
 
 export type PeriodFilter = "today" | "7days" | "month" | "custom";
